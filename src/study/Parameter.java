@@ -10,4 +10,7 @@ package study;
 public class Parameter {
     // 窗体宽度
     public static final Integer FRAMEWIDTH = 400;
+
+    // 显示、隐藏速度
+    public static final Integer SPEED = 50;
 }

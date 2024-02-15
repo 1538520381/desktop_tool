@@ -1,6 +1,6 @@
 package study;
 
-import study.Component.Frame;
+import study.component.Frame;
 
 /**
  * @author Persolute
