@@ -1,9 +1,7 @@
-package study.component.titleBar;
+package study.component.titleBar.controlBar.closeButton;
 
 import study.Parameter;
 import study.component.Frame;
-import study.component.titleBar.controlBar.ControlBar;
-import study.component.titleBar.title.Title;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,32 +11,35 @@ import java.awt.event.MouseEvent;
 /**
  * @author Persolute
  * @version 1.0
- * @description 标题栏
+ * @description 关闭按钮
  * @email 1538520381@qq.com
- * @date 2024/2/15 14:42
+ * @date 2024/2/26 15:14
  */
-public class TitleBar extends JPanel {
+public class CloseButton extends JButton {
     private final Frame frame;
 
-    public TitleBar(Frame frame) {
+    public CloseButton(Frame frame) {
         this.frame = frame;
 
-        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH, Parameter.TITLE_BAR_HEIGHT));
-        setBackground(Color.CYAN);
+        setText("x");
+        setPreferredSize(new Dimension(Parameter.CONTROL_BAR_BUTTON_WIDTH, Parameter.TITLE_BAR_HEIGHT));
+        setFocusable(false);
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        setLayout(new BorderLayout());
 
-        add(new Title(frame), BorderLayout.WEST);
-        add(new ControlBar(frame), BorderLayout.EAST);
     }
 
     private void addListener() {
         addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.exit(0);
+            }
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 frame.mouseEntered(e);

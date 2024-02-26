@@ -1,9 +1,7 @@
-package study.component.titleBar;
+package study.component.titleBar.controlBar;
 
-import study.Parameter;
 import study.component.Frame;
-import study.component.titleBar.controlBar.ControlBar;
-import study.component.titleBar.title.Title;
+import study.component.titleBar.controlBar.closeButton.CloseButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,28 +11,24 @@ import java.awt.event.MouseEvent;
 /**
  * @author Persolute
  * @version 1.0
- * @description 标题栏
+ * @description 控制栏
  * @email 1538520381@qq.com
- * @date 2024/2/15 14:42
+ * @date 2024/2/26 15:03
  */
-public class TitleBar extends JPanel {
+public class ControlBar extends JPanel {
     private final Frame frame;
 
-    public TitleBar(Frame frame) {
+    public ControlBar(Frame frame) {
         this.frame = frame;
-
-        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH, Parameter.TITLE_BAR_HEIGHT));
-        setBackground(Color.CYAN);
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        setLayout(new BorderLayout());
+        setLayout(new FlowLayout(FlowLayout.TRAILING, 0, 0));
 
-        add(new Title(frame), BorderLayout.WEST);
-        add(new ControlBar(frame), BorderLayout.EAST);
+        add(new CloseButton(frame));
     }
 
     private void addListener() {

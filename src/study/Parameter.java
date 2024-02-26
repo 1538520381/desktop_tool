@@ -16,6 +16,12 @@ public class Parameter {
     // 窗体宽度
     public static final Integer FRAME_WIDTH = 400;
 
+    // 控制栏按钮宽度
+    public static final Integer CONTROL_BAR_BUTTON_WIDTH = 50;
+
+    // 标题栏高度
+    public static final Integer TITLE_BAR_HEIGHT = 40;
+
     // 显示、隐藏速度
     public static final Integer SPEED = 50;
 }
