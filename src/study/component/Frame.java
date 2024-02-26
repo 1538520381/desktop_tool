@@ -1,6 +1,7 @@
 package study.component;
 
 import study.Parameter;
+import study.component.titleBar.TitleBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,8 +26,8 @@ public class Frame extends JFrame {
 
 
     public Frame() {
-        setSize(Parameter.FRAMEWIDTH, screenSize.height - screenInsets.top - screenInsets.bottom);
-        setLocation(screenSize.width - Parameter.FRAMEWIDTH - screenInsets.left - screenInsets.right, 0);
+        setSize(Parameter.FRAME_WIDTH, screenSize.height - screenInsets.top - screenInsets.bottom);
+        setLocation(screenSize.width - Parameter.FRAME_WIDTH - screenInsets.left - screenInsets.right, 0);
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -44,6 +45,8 @@ public class Frame extends JFrame {
     private void addComponent() {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
+
+        contentPane.add(new TitleBar(this), BorderLayout.NORTH);
     }
 
     private void addListener() {
@@ -52,18 +55,28 @@ public class Frame extends JFrame {
         contentPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                mouseFlag = true;
-                if (getY() < 0) {
-                    display();
-                }
+                Frame.this.mouseEntered(e);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                mouseFlag = false;
-                hidden();
+                Frame.this.mouseExited(e);
             }
         });
+    }
+
+    public void mouseEntered(MouseEvent e) {
+        mouseFlag = true;
+        if (getY() < 0) {
+            display();
+        }
+    }
+
+    public void mouseExited(MouseEvent e) {
+        if (!getContentPane().contains(e.getPoint())) {
+            mouseFlag = false;
+            hidden();
+        }
     }
 
     /*
