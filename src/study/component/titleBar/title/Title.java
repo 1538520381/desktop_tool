@@ -59,6 +59,7 @@ public class Title extends JLabel {
             @Override
             public void mouseDragged(MouseEvent e) {
                 frame.setLocation(frame.getX() + e.getX() - x, frame.getY() + e.getY() - y);
+                frame.repaint();
             }
         });
     }

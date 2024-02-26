@@ -1,4 +1,4 @@
-package study.component.titleBar.controlBar.closeButton;
+package study.component.titleBar.controlBar.minimizeButton;
 
 import study.Parameter;
 import study.component.Frame;
@@ -11,17 +11,17 @@ import java.awt.event.MouseEvent;
 /**
  * @author Persolute
  * @version 1.0
- * @description 关闭按钮
+ * @description 最小化按钮
  * @email 1538520381@qq.com
- * @date 2024/2/26 15:14
+ * @date 2024/2/26 15:33
  */
-public class CloseButton extends JButton {
+public class MinimizeButton extends JButton {
     private final Frame frame;
 
-    public CloseButton(Frame frame) {
+    public MinimizeButton(Frame frame) {
         this.frame = frame;
 
-        setText("x");
+        setText("-");
         setPreferredSize(new Dimension(Parameter.CONTROL_BAR_BUTTON_WIDTH, Parameter.TITLE_BAR_HEIGHT));
         setFocusable(false);
 
@@ -37,7 +37,12 @@ public class CloseButton extends JButton {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.exit(0);
+                frame.frameWidth = frame.getWidth();
+                frame.frameHeight = frame.getHeight();
+                frame.frameX = frame.getX();
+                frame.frameY = frame.getY();
+
+                frame.setState(JFrame.ICONIFIED);
             }
 
             @Override
@@ -47,8 +52,6 @@ public class CloseButton extends JButton {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                System.out.println(e);
-                System.out.println(e.getPoint());
                 frame.mouseExited(e);
             }
         });

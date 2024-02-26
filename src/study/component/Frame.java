@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,14 +22,18 @@ import java.util.TimerTask;
 public class Frame extends JFrame {
     private final Dimension screenSize = getToolkit().getScreenSize(); // 屏幕尺寸
     private final Insets screenInsets = getToolkit().getScreenInsets(getGraphicsConfiguration()); // 工作区边距
+    public Integer frameWidth = Parameter.FRAME_WIDTH;
+    public Integer frameHeight = screenSize.height - screenInsets.top - screenInsets.bottom;
+    public Integer frameX = screenSize.width - Parameter.FRAME_WIDTH - screenInsets.left - screenInsets.right;
+    public Integer frameY = 0;
 
     private final java.util.Timer displayTimer = new Timer(); // 计时器
     private boolean mouseFlag = false; // 鼠标悬浮标识
 
 
     public Frame() {
-        setSize(Parameter.FRAME_WIDTH, screenSize.height - screenInsets.top - screenInsets.bottom);
-        setLocation(screenSize.width - Parameter.FRAME_WIDTH - screenInsets.left - screenInsets.right, 0);
+        setSize(frameWidth, frameHeight);
+        setLocation(frameX, frameY);
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -61,6 +67,14 @@ public class Frame extends JFrame {
             @Override
             public void mouseExited(MouseEvent e) {
                 Frame.this.mouseExited(e);
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                setSize(frameWidth, frameHeight);
+                setLocation(frameX, frameY);
             }
         });
     }

@@ -2,6 +2,7 @@ package study.component.titleBar.controlBar;
 
 import study.component.Frame;
 import study.component.titleBar.controlBar.closeButton.CloseButton;
+import study.component.titleBar.controlBar.minimizeButton.MinimizeButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +27,9 @@ public class ControlBar extends JPanel {
     }
 
     private void addComponent() {
-        setLayout(new FlowLayout(FlowLayout.TRAILING, 0, 0));
+        setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
+        add(new MinimizeButton(frame));
         add(new CloseButton(frame));
     }
 
