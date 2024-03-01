@@ -37,12 +37,12 @@ public class ControlBar extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                frame.mouseEntered(e);
+                frame.mouseEntered();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                frame.mouseExited(e);
+                frame.mouseExited(e.getX() + getLocationOnScreen().x - frame.getLocationOnScreen().x, e.getY() + getLocationOnScreen().y - frame.getLocationOnScreen().y);
             }
         });
     }

@@ -1,6 +1,7 @@
 package study.component;
 
 import study.Parameter;
+import study.component.tab.Tab;
 import study.component.titleBar.TitleBar;
 
 import javax.swing.*;
@@ -43,9 +44,8 @@ public class Frame extends JFrame {
 
         setVisible(true);
 
-        if (!mouseFlag) {
-            hidden();
-        }
+        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+        mouseExited(mouseLocation.x - frameX, mouseLocation.y - frameY);
     }
 
     private void addComponent() {
@@ -61,12 +61,12 @@ public class Frame extends JFrame {
         contentPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                Frame.this.mouseEntered(e);
+                Frame.this.mouseEntered();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                Frame.this.mouseExited(e);
+                Frame.this.mouseExited(e.getX(), e.getY());
             }
         });
 
@@ -79,15 +79,15 @@ public class Frame extends JFrame {
         });
     }
 
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered() {
         mouseFlag = true;
         if (getY() < 0) {
             display();
         }
     }
 
-    public void mouseExited(MouseEvent e) {
-        if (!getContentPane().contains(e.getPoint())) {
+    public void mouseExited(int x, int y) {
+        if (!getContentPane().contains(new Point(x, y))) {
             mouseFlag = false;
             hidden();
         }

@@ -32,7 +32,7 @@ public class TitleBar extends JPanel {
 
     private void addComponent() {
         setLayout(new BorderLayout());
-
+        add(new Panel(), BorderLayout.EAST);
         add(new Title(frame), BorderLayout.WEST);
         add(new ControlBar(frame), BorderLayout.EAST);
     }
@@ -41,12 +41,12 @@ public class TitleBar extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                frame.mouseEntered(e);
+                frame.mouseEntered();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                frame.mouseExited(e);
+                frame.mouseExited(e.getX() + getLocationOnScreen().x - frame.getLocationOnScreen().x, e.getY() + getLocationOnScreen().y - frame.getLocationOnScreen().y);
             }
         });
     }
