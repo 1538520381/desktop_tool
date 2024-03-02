@@ -22,8 +22,6 @@ public class ItemFather extends JPanel {
     public ItemFather(Frame frame, String text) {
         this.frame = frame;
 
-        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH / 2, Parameter.ACCOUNT_OPERATION_ITEM_HEIGHT));
-
         addComponent(text);
         addListener();
     }

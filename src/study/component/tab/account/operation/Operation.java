@@ -3,6 +3,7 @@ package study.component.tab.account.operation;
 import study.Parameter;
 import study.component.Frame;
 import study.component.tab.account.operation.date.Date;
+import study.component.tab.account.operation.type.Type;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,16 +23,17 @@ public class Operation extends JPanel {
     public Operation(Frame frame) {
         this.frame = frame;
 
-        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH / 2, (frame.frameHeight - Parameter.TITLE_BAR_HEIGHT) / 3));
+        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH * 2 / 3, (frame.frameHeight - Parameter.TITLE_BAR_HEIGHT) / 3));
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
         add(new Date(frame));
+        add(new Type(frame));
     }
 
     private void addListener() {
