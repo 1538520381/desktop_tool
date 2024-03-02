@@ -8,6 +8,7 @@ import study.component.tab.ledger.operation.date.monthLabel.MonthLabel;
 import study.component.tab.ledger.operation.date.year.Year;
 import study.component.tab.ledger.operation.date.yearLabel.YearLabel;
 import study.component.tab.ledger.operation.father.ItemFather;
+import study.entity.ledger.operation.OperationEntity;
 
 /**
  * @author Persolute
@@ -17,19 +18,19 @@ import study.component.tab.ledger.operation.father.ItemFather;
  * @date 2024/3/1 16:55
  */
 public class Date extends ItemFather {
-    public Date(Frame frame) {
-        super(frame, "日期");
+    public Date(Frame frame, OperationEntity operationEntity) {
+        super(frame, operationEntity, "日期");
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        add(new Year(frame));
+        add(new Year(frame, operationEntity));
         add(new YearLabel(frame));
-        add(new Month(frame));
+        add(new Month(frame, operationEntity));
         add(new MonthLabel(frame));
-        add(new Day(frame));
+        add(new Day(frame, operationEntity));
         add(new DayLabel(frame));
     }
 

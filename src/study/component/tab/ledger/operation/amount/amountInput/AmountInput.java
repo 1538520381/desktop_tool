@@ -2,8 +2,11 @@ package study.component.tab.ledger.operation.amount.amountInput;
 
 import study.Parameter;
 import study.component.Frame;
+import study.entity.ledger.operation.OperationEntity;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -19,9 +22,11 @@ import java.awt.event.MouseEvent;
  */
 public class AmountInput extends JTextField {
     private final Frame frame;
+    private final OperationEntity operationEntity;
 
-    public AmountInput(Frame frame) {
+    public AmountInput(Frame frame, OperationEntity operationEntity) {
         this.frame = frame;
+        this.operationEntity = operationEntity;
 
         setPreferredSize(new Dimension(60, Parameter.ACCOUNT_OPERATION_ITEM_HEIGHT * 3 / 4));
 
@@ -58,6 +63,23 @@ public class AmountInput extends JTextField {
                 if (!Character.isDigit(ch) && !Character.isISOControl(ch) && ch != '.') {
                     e.consume();
                 }
+            }
+        });
+
+        getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                operationEntity.setAmount(getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                operationEntity.setAmount(getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                operationEntity.setAmount(getText());
             }
         });
     }

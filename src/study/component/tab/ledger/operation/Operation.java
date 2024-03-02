@@ -6,6 +6,7 @@ import study.component.tab.ledger.operation.account.Account;
 import study.component.tab.ledger.operation.amount.Amount;
 import study.component.tab.ledger.operation.date.Date;
 import study.component.tab.ledger.operation.type.Type;
+import study.entity.ledger.operation.OperationEntity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,9 +22,11 @@ import java.awt.event.MouseEvent;
  */
 public class Operation extends JPanel {
     private final Frame frame;
+    private final OperationEntity operationEntity;
 
     public Operation(Frame frame) {
         this.frame = frame;
+        this.operationEntity = new OperationEntity();
 
         setPreferredSize(new Dimension(Parameter.FRAME_WIDTH * 2 / 3, (frame.frameHeight - Parameter.TITLE_BAR_HEIGHT) / 3));
 
@@ -34,10 +37,10 @@ public class Operation extends JPanel {
     private void addComponent() {
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        add(new Date(frame));
-        add(new Type(frame));
-        add(new Account(frame));
-        add(new Amount(frame));
+        add(new Date(frame, operationEntity));
+        add(new Type(frame, operationEntity));
+        add(new Account(frame, operationEntity));
+        add(new Amount(frame, operationEntity));
     }
 
     private void addListener() {

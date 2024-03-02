@@ -2,6 +2,7 @@ package study.component.tab.ledger.operation.father;
 
 import study.component.Frame;
 import study.component.tab.ledger.operation.father.label.Label;
+import study.entity.ledger.operation.OperationEntity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +18,11 @@ import java.awt.event.MouseEvent;
  */
 public class ItemFather extends JPanel {
     protected final Frame frame;
+    protected final OperationEntity operationEntity;
 
-    public ItemFather(Frame frame, String text) {
+    public ItemFather(Frame frame, OperationEntity operationEntity, String text) {
         this.frame = frame;
+        this.operationEntity = operationEntity;
 
         addComponent(text);
         addListener();

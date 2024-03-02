@@ -2,8 +2,11 @@ package study.component.tab.ledger.operation.date.year;
 
 import study.Parameter;
 import study.component.Frame;
+import study.entity.ledger.operation.OperationEntity;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -20,11 +23,14 @@ import java.time.LocalDate;
  */
 public class Year extends JTextField {
     private final Frame frame;
+    private final OperationEntity operationEntity;
 
-    public Year(Frame frame) {
+    public Year(Frame frame, OperationEntity operationEntity) {
         this.frame = frame;
+        this.operationEntity = operationEntity;
 
         setText(String.valueOf(LocalDate.now().getYear()));
+        operationEntity.setYear(getText());
         setPreferredSize(new Dimension(40, Parameter.ACCOUNT_OPERATION_ITEM_HEIGHT * 3 / 4));
 
         addComponent();
@@ -60,6 +66,23 @@ public class Year extends JTextField {
                 if (!Character.isDigit(ch) && !Character.isISOControl(ch)) {
                     e.consume();
                 }
+            }
+        });
+
+        getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                operationEntity.setYear(getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                operationEntity.setYear(getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                operationEntity.setYear(getText());
             }
         });
     }
