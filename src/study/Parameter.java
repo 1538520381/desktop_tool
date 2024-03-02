@@ -1,7 +1,5 @@
 package study;
 
-import java.awt.*;
-
 /**
  * @author Persolute
  * @version 1.0
@@ -13,6 +11,9 @@ public class Parameter {
     // 桌面工具
     public static final String TITLE = "Desktop Tool";
 
+    // 显示、隐藏速度
+    public static final Integer SPEED = 50;
+
     // 窗体宽度
     public static final Integer FRAME_WIDTH = 400;
 
@@ -22,6 +23,9 @@ public class Parameter {
     // 标题栏高度
     public static final Integer TITLE_BAR_HEIGHT = 40;
 
-    // 显示、隐藏速度
-    public static final Integer SPEED = 50;
+    // 账单模块操作区标签宽度
+    public static final Integer ACCOUNT_OPERATION_LABEL_WIDTH = 50;
+
+    // 账单模块操作区域表单高度
+    public static final Integer ACCOUNT_OPERATION_ITEM_HEIGHT = 30;
 }

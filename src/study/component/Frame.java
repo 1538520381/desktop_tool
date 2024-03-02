@@ -53,6 +53,7 @@ public class Frame extends JFrame {
         contentPane.setLayout(new BorderLayout());
 
         contentPane.add(new TitleBar(this), BorderLayout.NORTH);
+        contentPane.add(new Tab(this), BorderLayout.CENTER);
     }
 
     private void addListener() {
