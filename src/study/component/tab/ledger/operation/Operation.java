@@ -5,6 +5,7 @@ import study.component.Frame;
 import study.component.tab.ledger.operation.account.Account;
 import study.component.tab.ledger.operation.amount.Amount;
 import study.component.tab.ledger.operation.date.Date;
+import study.component.tab.ledger.operation.description.Description;
 import study.component.tab.ledger.operation.type.Type;
 import study.entity.ledger.operation.OperationEntity;
 
@@ -41,6 +42,7 @@ public class Operation extends JPanel {
         add(new Type(frame, operationEntity));
         add(new Account(frame, operationEntity));
         add(new Amount(frame, operationEntity));
+        add(new Description(frame, operationEntity));
     }
 
     private void addListener() {
