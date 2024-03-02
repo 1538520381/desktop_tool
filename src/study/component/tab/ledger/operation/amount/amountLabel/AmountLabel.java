@@ -1,43 +1,32 @@
-package study.component.tab.ledger.operation;
+package study.component.tab.ledger.operation.amount.amountLabel;
 
-import study.Parameter;
 import study.component.Frame;
-import study.component.tab.ledger.operation.account.Account;
-import study.component.tab.ledger.operation.amount.Amount;
-import study.component.tab.ledger.operation.date.Date;
-import study.component.tab.ledger.operation.type.Type;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
  * @author Persolute
  * @version 1.0
- * @description 操作区
+ * @description 金额标签
  * @email 1538520381@qq.com
- * @date 2024/3/1 16:42
+ * @date 2024/3/2 21:08
  */
-public class Operation extends JPanel {
+public class AmountLabel extends JLabel {
     private final Frame frame;
 
-    public Operation(Frame frame) {
+    public AmountLabel(Frame frame) {
         this.frame = frame;
 
-        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH * 2 / 3, (frame.frameHeight - Parameter.TITLE_BAR_HEIGHT) / 3));
+        setText("元");
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        add(new Date(frame));
-        add(new Type(frame));
-        add(new Account(frame));
-        add(new Amount(frame));
     }
 
     private void addListener() {
