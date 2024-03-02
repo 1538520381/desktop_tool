@@ -1,35 +1,32 @@
-package study.component.tab.account;
+package study.component.tab.ledger.operation.date.monthLabel;
 
-import study.Parameter;
 import study.component.Frame;
-import study.component.tab.account.operation.Operation;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
  * @author Persolute
  * @version 1.0
- * @description 账本
+ * @description 月标签
  * @email 1538520381@qq.com
- * @date 2024/3/1 16:10
+ * @date 2024/3/2 16:52
  */
-public class Account extends JPanel {
+public class MonthLabel extends JLabel {
     private final Frame frame;
 
-    public Account(Frame frame) {
+    public MonthLabel(Frame frame) {
         this.frame = frame;
+
+        setText("月");
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        setLayout(new BorderLayout());
 
-        add(new Operation(frame), BorderLayout.WEST);
     }
 
     private void addListener() {

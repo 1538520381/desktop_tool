@@ -1,4 +1,4 @@
-package study.component.tab.account.operation.date.dayLabel;
+package study.component.tab.ledger.operation.date.dayLabel;
 
 import study.component.Frame;
 

@@ -1,7 +1,7 @@
-package study.component.tab.account.operation.type;
+package study.component.tab.ledger.operation.type;
 
 import study.component.Frame;
-import study.component.tab.account.operation.father.ItemFather;
+import study.component.tab.ledger.operation.father.ItemFather;
 
 import javax.swing.*;
 

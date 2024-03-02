@@ -1,7 +1,7 @@
 package study.component.tab;
 
 import study.component.Frame;
-import study.component.tab.account.Account;
+import study.component.tab.ledger.Ledger;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -25,7 +25,7 @@ public class Tab extends JTabbedPane {
     }
 
     private void addComponent() {
-        addTab("账本", new Account(frame));
+        addTab("账本", new Ledger(frame));
     }
 
     private void addListener() {

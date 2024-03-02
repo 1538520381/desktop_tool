@@ -1,7 +1,10 @@
-package study.component.tab.account.operation.father.label;
+package study.component.tab.ledger.operation;
 
 import study.Parameter;
 import study.component.Frame;
+import study.component.tab.ledger.operation.account.Account;
+import study.component.tab.ledger.operation.date.Date;
+import study.component.tab.ledger.operation.type.Type;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,26 +14,28 @@ import java.awt.event.MouseEvent;
 /**
  * @author Persolute
  * @version 1.0
- * @description 标签
+ * @description 操作区
  * @email 1538520381@qq.com
- * @date 2024/3/1 17:02
+ * @date 2024/3/1 16:42
  */
-public class Label extends JLabel {
+public class Operation extends JPanel {
     private final Frame frame;
 
-    public Label(Frame frame, String text) {
+    public Operation(Frame frame) {
         this.frame = frame;
 
-        setText(text + "：");
-        setPreferredSize(new Dimension(Parameter.ACCOUNT_OPERATION_LABEL_WIDTH, Parameter.ACCOUNT_OPERATION_ITEM_HEIGHT));
-        setHorizontalAlignment(SwingConstants.RIGHT);
+        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH * 2 / 3, (frame.frameHeight - Parameter.TITLE_BAR_HEIGHT) / 3));
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
+        add(new Date(frame));
+        add(new Type(frame));
+        add(new Account(frame));
     }
 
     private void addListener() {

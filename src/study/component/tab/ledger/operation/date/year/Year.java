@@ -1,8 +1,7 @@
-package study.component.tab.account.operation.date.year;
+package study.component.tab.ledger.operation.date.year;
 
 import study.Parameter;
 import study.component.Frame;
-import study.component.tab.account.operation.date.Date;
 
 import javax.swing.*;
 import java.awt.*;

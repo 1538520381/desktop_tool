@@ -1,6 +1,7 @@
-package study.component.tab.account.operation.date.monthLabel;
+package study.component.tab.ledger.operation.date.yearLabel;
 
 import study.component.Frame;
+
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -9,17 +10,17 @@ import java.awt.event.MouseEvent;
 /**
  * @author Persolute
  * @version 1.0
- * @description 月标签
+ * @description 年标签
  * @email 1538520381@qq.com
- * @date 2024/3/2 16:52
+ * @date 2024/3/2 16:46
  */
-public class MonthLabel extends JLabel {
+public class YearLabel extends JLabel {
     private final Frame frame;
 
-    public MonthLabel(Frame frame) {
+    public YearLabel(Frame frame) {
         this.frame = frame;
 
-        setText("月");
+        setText("年");
 
         addComponent();
         addListener();

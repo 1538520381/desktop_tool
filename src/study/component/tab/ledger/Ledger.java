@@ -1,9 +1,7 @@
-package study.component.tab.account.operation;
+package study.component.tab.ledger;
 
-import study.Parameter;
 import study.component.Frame;
-import study.component.tab.account.operation.date.Date;
-import study.component.tab.account.operation.type.Type;
+import study.component.tab.ledger.operation.Operation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,27 +11,24 @@ import java.awt.event.MouseEvent;
 /**
  * @author Persolute
  * @version 1.0
- * @description 操作区
+ * @description 账本
  * @email 1538520381@qq.com
- * @date 2024/3/1 16:42
+ * @date 2024/3/1 16:10
  */
-public class Operation extends JPanel {
+public class Ledger extends JPanel {
     private final Frame frame;
 
-    public Operation(Frame frame) {
+    public Ledger(Frame frame) {
         this.frame = frame;
-
-        setPreferredSize(new Dimension(Parameter.FRAME_WIDTH * 2 / 3, (frame.frameHeight - Parameter.TITLE_BAR_HEIGHT) / 3));
 
         addComponent();
         addListener();
     }
 
     private void addComponent() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BorderLayout());
 
-        add(new Date(frame));
-        add(new Type(frame));
+        add(new Operation(frame), BorderLayout.WEST);
     }
 
     private void addListener() {

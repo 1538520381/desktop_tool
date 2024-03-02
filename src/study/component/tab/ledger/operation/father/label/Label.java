@@ -1,26 +1,29 @@
-package study.component.tab.account.operation.date.yearLabel;
+package study.component.tab.ledger.operation.father.label;
 
+import study.Parameter;
 import study.component.Frame;
 
-
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
  * @author Persolute
  * @version 1.0
- * @description 年标签
+ * @description 标签
  * @email 1538520381@qq.com
- * @date 2024/3/2 16:46
+ * @date 2024/3/1 17:02
  */
-public class YearLabel extends JLabel {
+public class Label extends JLabel {
     private final Frame frame;
 
-    public YearLabel(Frame frame) {
+    public Label(Frame frame, String text) {
         this.frame = frame;
 
-        setText("年");
+        setText(text + "：");
+        setPreferredSize(new Dimension(Parameter.ACCOUNT_OPERATION_LABEL_WIDTH, Parameter.ACCOUNT_OPERATION_ITEM_HEIGHT));
+        setHorizontalAlignment(SwingConstants.RIGHT);
 
         addComponent();
         addListener();

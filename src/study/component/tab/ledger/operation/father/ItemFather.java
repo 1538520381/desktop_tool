@@ -1,8 +1,7 @@
-package study.component.tab.account.operation.father;
+package study.component.tab.ledger.operation.father;
 
-import study.Parameter;
 import study.component.Frame;
-import study.component.tab.account.operation.father.label.Label;
+import study.component.tab.ledger.operation.father.label.Label;
 
 import javax.swing.*;
 import java.awt.*;
