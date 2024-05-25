@@ -1,15 +1,85 @@
 <template>
-    <div id="home">
-
+  <div id="home">
+    <div class="menu">
+      <el-button
+        class="menu-item"
+        :class="{ 'menu-item-hover': index == menuItemActive }"
+        v-for="(item, index) in menuItem"
+        :key="index"
+        @click="selectMenuItem(index)"
+        >{{ item.name }}</el-button
+      >
     </div>
+    <div class="main">
+      <component :is="menuItem[menuItemActive].component" />
+    </div>
+  </div>
 </template>
 
 <script>
+import Test from "@/views/test";
 export default {
-    name: "Home"
-}
+  name: "Home",
+  data() {
+    return {
+      menuItem: [
+        {
+          name: "账本",
+          component: Test,
+        },
+        {
+          name: "账本",
+          component: Test,
+        },
+        {
+          name: "账本",
+          component: Test,
+        },
+        {
+          name: "账本",
+          component: Test,
+        },
+      ],
+      menuItemActive: 0,
+    };
+  },
+  methods: {
+    selectMenuItem(index) {
+      this.menuItemActive = index;
+    },
+  },
+};
 </script>
 
-<style>
+<style scoped>
+#home .menu {
+  padding: 10px 10px 10px 10px;
 
+  border-radius: 10px;
+
+  background: rgb(232, 230, 230);
+}
+
+#home .menu .menu-item {
+  height: 25px;
+
+  margin: 0px 0px 0px 2px;
+
+  font-size: 12px;
+}
+
+#home .menu .menu-item-hover {
+  background-color: #ecf5ff;
+  border-color: #c6e2ff;
+  color: #409eff;
+}
+
+#home .main {
+  margin: 10px 0px 0px 0px;
+  padding: 10px 10px 10px 10px;
+
+  border-radius: 10px;
+
+  background: rgb(232, 230, 230);
+}
 </style>
