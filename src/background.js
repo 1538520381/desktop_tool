@@ -17,6 +17,7 @@ async function createWindow() {
     height: 600,
     x: screen.getPrimaryDisplay().workArea.width - 300,
     y: 0,
+    alwaysOnTop: true,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
