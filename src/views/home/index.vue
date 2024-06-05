@@ -3,7 +3,7 @@
     <div class="menu">
       <el-button
         class="menu-item"
-        :class="{ 'menu-item-hover': index == menuItemActive }"
+        :class="{ 'menu-item-hover': index === menuItemActive }"
         v-for="(item, index) in menuItem"
         :key="index"
         @click="selectMenuItem(index)"
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Test from "@/views/test";
+import Ledger from '@/views/ledger'
 export default {
   name: "Home",
   data() {
@@ -25,19 +25,7 @@ export default {
       menuItem: [
         {
           name: "账本",
-          component: Test,
-        },
-        {
-          name: "账本",
-          component: Test,
-        },
-        {
-          name: "账本",
-          component: Test,
-        },
-        {
-          name: "账本",
-          component: Test,
+          component: Ledger,
         },
       ],
       menuItemActive: 0,
