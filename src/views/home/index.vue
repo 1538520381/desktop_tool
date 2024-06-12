@@ -42,32 +42,28 @@ export default {
 <style scoped>
 #home .menu {
   padding: 10px 10px 10px 10px;
-
   border-radius: 10px;
-
-  background: rgb(232, 230, 230);
+  background-color: rgb(232, 230, 230);
 }
 
 #home .menu .menu-item {
   height: 25px;
-
   margin: 0px 0px 0px 2px;
 
   font-size: 12px;
 }
 
 #home .menu .menu-item-hover {
-  background-color: #ecf5ff;
   border-color: #c6e2ff;
+  background-color: #ecf5ff;
+  
   color: #409eff;
 }
 
 #home .main {
   margin: 10px 0px 0px 0px;
   padding: 10px 10px 10px 10px;
-
   border-radius: 10px;
-
-  background: rgb(232, 230, 230);
+  background-color: rgb(232, 230, 230);
 }
 </style>

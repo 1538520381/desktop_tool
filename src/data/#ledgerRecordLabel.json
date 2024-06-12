@@ -1,0 +1,20 @@
+[
+    {
+        "id": {
+            "description": "主键",
+            "type": "number",
+            "null": false,
+            "auto": "autoIncrement:1"
+        },
+        "name": {
+            "description": "标签名",
+            "type": "string",
+            "null": false
+        },
+        "sort": {
+            "description": "排序",
+            "type": "number",
+            "null": false
+        }
+    }
+]

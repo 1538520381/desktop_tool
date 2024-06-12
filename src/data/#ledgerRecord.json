@@ -1,0 +1,40 @@
+[
+    {
+        "id": {
+            "description": "主键",
+            "type": "number",
+            "null": false,
+            "auto": "autoIncrement:1"
+        },
+        "ledgerAccountId": {
+            "description": "账号主键",
+            "type": "number",
+            "null": false
+        },
+        "ledgerRecordTypeId": {
+            "description": "类型主键",
+            "type": "number",
+            "null": false
+        },
+        "amount": {
+            "description": "金额",
+            "type": "number",
+            "null": false
+        },
+        "ledgerLabelId": {
+            "description": "标签主键",
+            "type": "number",
+            "null": false
+        },
+        "time": {
+            "description": "时间",
+            "type": "string",
+            "null": false
+        },
+        "description": {
+            "description": "描述",
+            "type": "string",
+            "null": true
+        }
+    }
+]

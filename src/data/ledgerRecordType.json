@@ -1,0 +1,27 @@
+[
+    {
+        "id": {
+            "description": "主键",
+            "type": "number",
+            "null": false,
+            "auto": "autoIncrement:1"
+        },
+        "name": {
+            "description": "类型",
+            "type": "string",
+            "null": false
+        }
+    },
+    {
+        "id": 1,
+        "name": "支出"
+    },
+    {
+        "id": 2,
+        "name": "收入"
+    },
+    {
+        "id": 3,
+        "name": "效正"
+    }
+]
