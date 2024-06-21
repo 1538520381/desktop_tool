@@ -1,1 +1,1 @@
-[{"id":{"description":"主键","type":"number","null":false,"auto":"autoIncrement:38"},"name":{"description":"标签名","type":"string","null":false},"sort":{"description":"排序","type":"number","null":false}}]
+[{"id":{"description":"主键","type":"number","null":false,"auto":"autoIncrement:40"},"name":{"description":"标签名","type":"string","null":false},"sort":{"description":"排序","type":"number","null":false}}]

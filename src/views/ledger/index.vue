@@ -213,8 +213,8 @@
       title="标签管理"
       width="80%"
     >
-      <el-form class="form">
-        <el-form-item class="form-item" :model="recordLabelEntity" label="标签">
+      <el-form class="form" :model="recordLabelEntity">
+        <el-form-item class="form-item" label="标签">
           <el-input
             class="name"
             v-model="recordLabelEntity.name"
@@ -282,8 +282,8 @@ export default {
   },
   created() {
     this.initRecordEntity();
+    this.initAccountEntity();
     this.initRecordLabelEntity();
-    this;
 
     Promise.all([
       this.getAccount(),
@@ -320,7 +320,7 @@ export default {
             this.$message.success("新增成功");
           })
           .catch((err) => {
-            this.$message.error(err.err);
+            this.$message.error(err.err.toString());
             console.log(err);
           });
       });
@@ -336,7 +336,7 @@ export default {
             this.$message.success("新增成功");
           })
           .catch((err) => {
-            this.$message.error(err.err);
+            this.$message.error(err.err.toString());
             console.log(err);
           });
       });
@@ -369,7 +369,7 @@ export default {
           this.$message.success("删除成功");
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -388,7 +388,7 @@ export default {
           this.$message.success("删除成功");
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -404,7 +404,7 @@ export default {
           this.$message.success("更新成功");
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -419,7 +419,7 @@ export default {
           this.getAccount();
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -433,7 +433,7 @@ export default {
           this.getRecordLabel();
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -448,7 +448,7 @@ export default {
           this.account = res.data.sort((a, b) => a.sort - b.sort);
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -459,7 +459,7 @@ export default {
           this.recordLabel = res.data.sort((a, b) => a.sort - b.sort);
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -470,7 +470,7 @@ export default {
           this.recordType = res.data;
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },
@@ -512,7 +512,7 @@ export default {
           this.changeCurrentPage();
         })
         .catch((err) => {
-          this.$message.error(err.err);
+          this.$message.error(err.err.toString());
           console.log(err);
         });
     },

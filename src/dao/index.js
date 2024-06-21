@@ -1,84 +1,12 @@
-const fs = window.require("fs");
+import { read, write, copy } from "@/utils/IOUtil"
 
-const databasePath = "src/data/"
+const databasePath = "/src/data/"
 const autoFunctionMap = {
     'autoIncrement': autoIncrement,
     'currentTime': currentTime
 }
 
-// 读写
-// 读取指定数据表数据
-function readData(dataName) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(databasePath + dataName + ".json", (err, data) => {
-            if (err) {
-                reject({
-                    code: 1,
-                    err: err,
-                });
-            } else {
-                resolve({
-                    code: 0,
-                    data: JSON.parse(data),
-                });
-            }
-        });
-    });
-}
 
-// 向指定数据表写入指定数据
-function writeData(dataName, data) {
-    return new Promise((resolve, reject) => {
-        fs.writeFile(databasePath + dataName + ".json", JSON.stringify(data), (err) => {
-            if (err) {
-                reject({
-                    code: 1,
-                    err: err,
-                });
-            } else {
-                resolve({
-                    code: 0
-                });
-            }
-        })
-    })
-}
-
-// 存档
-function archive(dataName) {
-    return new Promise((resolve, reject) => {
-        fs.rename(databasePath + dataName + ".json", databasePath + dataName + ".json.temp", (err) => {
-            if (err) {
-                reject({
-                    code: 1,
-                    err: err
-                })
-            } else {
-                resolve({
-                    code: 0
-                })
-            }
-        })
-    })
-}
-
-// 回档
-function rollback(dataName) {
-    return new Promise((resolve, reject) => {
-        fs.copyFile(databasePath + dataName + ".json.temp", databasePath + dataName + ".json", (err) => {
-            if (err) {
-                reject({
-                    code: 1,
-                    err: err
-                })
-            } else {
-                resolve({
-                    code: 1
-                })
-            }
-        })
-    })
-}
 
 // 自动补齐
 // 自增
@@ -197,17 +125,16 @@ function checkByQuery(item, queryWrapper) {
 // 增加单个
 export function insertOne(dataName, item) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res1) => {
+        read(databasePath + dataName + ".json").then((res1) => {
             checkItem(item, res1.data[0])
             res1.data.push(item)
-            archive(dataName).then((res2) => {
-                writeData(dataName, res1.data).then((res3) => {
+            copy(databasePath + dataName + ".json", databasePath + dataName + ".json.temp").then((res2) => {
+                write(databasePath + dataName + ".json", res1.data).then((res3) => {
                     resolve({
                         code: 0
                     })
                 }).catch((err) => {
-                    rollback(dataName).then((res3) => {
-
+                    copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
                     }).catch((err) => {
                         reject({
                             code: 1,
@@ -237,18 +164,18 @@ export function insertOne(dataName, item) {
 // 增加多个
 export function insertList(dataName, items) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res1) => {
+        read(databasePath + dataName + ".json").then((res1) => {
             for (let i = 0; i < items.length; i++) {
                 checkItem(items[i], res1.data[0])
                 res1.data.push(items[i])
             }
-            archive(dataName).then((res2) => {
-                writeData(dataName, res1.data).then((res3) => {
+            copy(databasePath + dataName + ".json", databasePath + dataName + ".json.temp").then((res2) => {
+                write(databasePath + dataName + ".json", res1.data).then((res3) => {
                     resolve({
                         code: 0
                     })
                 }).catch((err) => {
-                    rollback(dataName).then((res3) => {
+                    copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
 
                     }).catch((err) => {
                         reject({
@@ -280,17 +207,17 @@ export function insertList(dataName, items) {
 // 根据id删除
 export function deleteById(dataName, id) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res1) => {
+        read(databasePath + dataName + ".json").then((res1) => {
             for (let i = 1; i < res1.data.length; i++) {
                 if (res1.data[i]['id'] === id) {
                     res1.data.splice(i, 1)
-                    archive(dataName).then((res2) => {
-                        writeData(dataName, res1.data).then((res3) => {
+                    copy(databasePath + dataName + ".json", databasePath + dataName + ".json.temp").then((res2) => {
+                        write(databasePath + dataName + ".json", res1.data).then((res3) => {
                             resolve({
                                 code: 0
                             })
                         }).catch((err) => {
-                            rollback(dataName).then((res3) => {
+                            copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
 
                             }).catch((err) => {
                                 reject({
@@ -328,7 +255,7 @@ export function deleteById(dataName, id) {
 // 根据id列表删除
 export function deleteByIds(dataName, ids) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res1) => {
+        read(databasePath + dataName + ".json").then((res1) => {
             for (let i = 0; i < ids.length; i++) {
                 let flag = false
                 for (let j = 1; j < res1.data.length; j++) {
@@ -346,13 +273,13 @@ export function deleteByIds(dataName, ids) {
                     return;
                 }
             }
-            archive(dataName).then((res2) => {
-                writeData(dataName, res1.data).then((res3) => {
+            copy(databasePath + dataName + ".json", databasePath + dataName + ".json.temp").then((res2) => {
+                write(databasePath + dataName + ".json", res1.data).then((res3) => {
                     resolve({
                         code: 0
                     })
                 }).catch((err) => {
-                    rollback(dataName).then((res3) => {
+                    copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
 
                     }).catch((err) => {
                         reject({
@@ -384,20 +311,20 @@ export function deleteByIds(dataName, ids) {
 // 根据含id对象修改
 export function updateById(dataName, item) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res1) => {
+        read(databasePath + dataName + ".json").then((res1) => {
             for (let i = 1; i < res1.data.length; i++) {
                 if (res1.data[i]['id'] === item['id']) {
                     for (let itemKey in item) {
                         res1.data[i][itemKey] = item[itemKey]
                     }
                     checkItem(res1.data[i], res1.data[0])
-                    archive(dataName).then((res2) => {
-                        writeData(dataName, res1.data).then((res3) => {
+                    copy(databasePath + dataName + ".json", databasePath + dataName + ".json.temp").then((res2) => {
+                        write(databasePath + dataName + ".json", res1.data).then((res3) => {
                             resolve({
                                 code: 0
                             })
                         }).catch((err) => {
-                            rollback(dataName).then((res3) => {
+                            copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
 
                             }).catch((err) => {
                                 reject({
@@ -435,7 +362,7 @@ export function updateById(dataName, item) {
 // 根据含id对象列表修改
 export function updateByIds(dataName, items) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res1) => {
+        read(databasePath + dataName + ".json").then((res1) => {
             for (let i = 0; i < items.length; i++) {
                 let flag = false
                 for (let j = 1; j < res1.data.length; j++) {
@@ -456,13 +383,13 @@ export function updateByIds(dataName, items) {
                     return;
                 }
             }
-            archive(dataName).then((res2) => {
-                writeData(dataName, res1.data).then((res3) => {
+            copy(databasePath + dataName + ".json", databasePath + dataName + ".json.temp").then((res2) => {
+                write(databasePath + dataName + ".json", res1.data).then((res3) => {
                     resolve({
                         code: 0
                     })
                 }).catch((err) => {
-                    rollback(dataName).then((res3) => {
+                    copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
 
                     }).catch((err) => {
                         reject({
@@ -494,7 +421,7 @@ export function updateByIds(dataName, items) {
 // 查询所有
 export function selectAll(dataName) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res) => {
+        read(databasePath + dataName + ".json").then((res) => {
             let data = res.data
             data.shift();
             resolve({
@@ -513,7 +440,7 @@ export function selectAll(dataName) {
 // 根据id查询
 export function selectById(dataName, id) {
     return new Promise((resolve, reject) => {
-        readData(dataName).then((res) => {
+        read(databasePath + dataName + ".json").then((res) => {
             for (let i = 1; i < res.data.length; i++) {
                 if (res.data[i]['id'] === id) {
                     resolve({
@@ -540,7 +467,7 @@ export function selectById(dataName, id) {
 export function selectByQueryWrapper(dataName, queryWrapper) {
     return new Promise((resolve, reject) => {
         let data = []
-        readData(dataName).then((res) => {
+        read(databasePath + dataName + ".json").then((res) => {
             for (let i = 1; i < res.data.length; i++) {
                 if (checkByQuery(res.data[i], queryWrapper)) {
                     data.push(res.data[i])

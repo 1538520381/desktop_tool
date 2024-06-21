@@ -1,1 +1,1 @@
-[{"id":{"description":"主键","type":"number","null":false,"auto":"autoIncrement:18"},"name":{"description":"账号名称","type":"string","null":false},"sort":{"description":"排序","type":"number","null":false}},{"name":"3434","sort":1,"id":17}]
+[{"id":{"description":"主键","type":"number","null":false,"auto":"autoIncrement:21"},"name":{"description":"账号名称","type":"string","null":false},"sort":{"description":"排序","type":"number","null":false}},{"name":"24","sort":2,"id":20}]
