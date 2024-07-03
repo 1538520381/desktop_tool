@@ -4,7 +4,7 @@
       <div class="title">总览</div>
       <div>
         <div class="item" v-for="(item, index) in account" :key="index">
-          {{ item.name + "：" + item.amount + "元" }}
+          {{ item.name + "：" + Math.round(item.amount * 100) / 100 + "元" }}
         </div>
       </div>
     </div>
@@ -289,9 +289,10 @@ export default {
       this.getAccount(),
       this.getRecordLabel(),
       this.getRecordType(),
-      this.getRecord(),
     ]).then(() => {
-      this.flag = true;
+      Promise.all([this.getRecord()]).then(() => {
+        this.flag = true;
+      });
     });
   },
   methods: {

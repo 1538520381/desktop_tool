@@ -1,1 +1,1 @@
-[{"id":{"description":"主键","type":"number","null":false,"auto":"autoIncrement:21"},"name":{"description":"账号名称","type":"string","null":false},"sort":{"description":"排序","type":"number","null":false}},{"name":"24","sort":2,"id":20}]
+[{"id":{"description":"主键","type":"number","null":false,"auto":"autoIncrement:25"},"name":{"description":"账号名称","type":"string","null":false},"sort":{"description":"排序","type":"number","null":false}},{"name":"微信","sort":1,"id":21},{"name":"支付宝","sort":2,"id":22},{"name":"中国农业银行","sort":3,"id":23},{"name":"12","sort":4,"id":24}]
