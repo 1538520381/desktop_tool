@@ -1,1 +1,5 @@
-{"selfStartUp":false}
+{
+    "selfStartUp": false,
+    "baiduAppId": "",
+    "baiduSecretKey": ""
+}

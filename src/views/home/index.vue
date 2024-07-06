@@ -32,11 +32,25 @@
       title="设置"
     >
       <el-form class="form" :model="setup">
-        <el-form-item class="item" label="开机自启动">
+        <el-form-item class="item" label="开机自启动" label-width="100px">
           <el-switch
             class="selfStartUp"
             v-model="setup.selfStartUp"
             @change="setSelfStartUp"
+          />
+        </el-form-item>
+        <el-form-item class="item" label="百度AppId" label-width="100px">
+          <el-input
+            v-model="setup.baiduAppId"
+            type="password"
+            @change="setBaiduAppId"
+          />
+        </el-form-item>
+        <el-form-item class="item" label="百度密钥" label-width="100px">
+          <el-input
+            v-model="setup.baiduSecretKey"
+            type="password"
+            @change="setBaiduSecretKey"
           />
         </el-form-item>
       </el-form>
@@ -46,6 +60,7 @@
 
 <script>
 import Ledger from "@/views/ledger";
+import Translate from "@/views/translation";
 
 import { read, write } from "@/utils/IOUtil";
 import { openSelfStartUp, closeSelfStartUp } from "@/utils/selfStartUpUtil";
@@ -69,6 +84,10 @@ export default {
           name: "账本",
           component: Ledger,
         },
+        {
+          name: "翻译",
+          component: Translate,
+        },
       ],
 
       menuItemActive: 0,
@@ -79,16 +98,26 @@ export default {
     };
   },
   created() {
-    read("/src/json/setup.json")
-      .then((res) => {
-        this.setup = res.data;
-      })
-      .catch((err) => {
-        this.$message.error(err.err.toString());
-        console.log(err);
-      });
+    this.getSetup();
   },
   methods: {
+    // 修改设置
+    updateSetup() {
+      return write("/src/json/setup.json", this.setup);
+    },
+
+    // 获取设置
+    getSetup() {
+      read("/src/json/setup.json")
+        .then((res) => {
+          this.setup = res.data;
+        })
+        .catch((err) => {
+          this.$message.error(err.err.toString());
+          console.log(err);
+        });
+    },
+
     // 打开设置对话框
     openSetupDialog() {
       this.setupDialogVisible = true;
@@ -101,7 +130,7 @@ export default {
 
     // 设置开机自启动
     setSelfStartUp() {
-      write("/src/json/setup.json", this.setup)
+      this.updateSetup()
         .then((res) => {
           if (this.setup.selfStartUp) {
             openSelfStartUp();
@@ -109,6 +138,24 @@ export default {
             closeSelfStartUp();
           }
         })
+        .catch((err) => {
+          this.$message.error(err.err.toString());
+          console.log(err);
+        });
+    },
+    // 设置百度AppId
+    setBaiduAppId() {
+      this.updateSetup()
+        .then((res) => {})
+        .catch((err) => {
+          this.$message.error(err.err.toString());
+          console.log(err);
+        });
+    },
+    // 设置百度密钥
+    setBaiduSecretKey() {
+      this.updateSetup()
+        .then((res) => {})
         .catch((err) => {
           this.$message.error(err.err.toString());
           console.log(err);
