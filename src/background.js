@@ -1,19 +1,20 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, screen, ipcMain, dialog } from 'electron'
+import { app, protocol, BrowserWindow, screen, ipcMain, dialog, Tray, Menu } from 'electron'
+import path from 'path-browserify';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const execPath = process.execPath;
 
-let win;
+let tray;
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
 async function createWindow() {
-  win = new BrowserWindow({
+  let win = new BrowserWindow({
     width: 350,
     height: 800,
     x: screen.getPrimaryDisplay().workArea.width - 350,
@@ -33,6 +34,31 @@ async function createWindow() {
     createProtocol('app')
     win.loadURL('app://./index.html')
   }
+
+  win.on('close', (event) => {
+    win.hide();
+    win.setSkipTaskbar(true);
+    event.preventDefault();
+  });
+
+  if (isDevelopment) {
+    tray = new Tray(path.join(__static, './logo/logo.ico'))
+  } else {
+    tray = new Tray(path.join(__dirname, './logo/logo.ico'))
+  }
+  tray.setToolTip('desktop_tool')
+  tray.on('click', () => {
+    win.show()
+    win.setSkipTaskbar(false)
+  })
+  const contectMenu = Menu.buildFromTemplate([
+    {
+      label: '退出', click: () => {
+        win.destroy()
+      }
+    }
+  ])
+  tray.setContextMenu(contectMenu)
 }
 
 app.on('window-all-closed', () => {
