@@ -7,18 +7,22 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run electron:serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+npm run electron:build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### TO DO
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- [x] 整体框架
+- [x] 设置
+- [x] 账本模块
+- [x] 翻译模块
+- [ ] 剪贴栏模块
+- [ ] 随手记模块
+- [ ] 代做模块
+- [ ] 手写输入模块
+- [ ] 屏幕边缘自动隐藏
