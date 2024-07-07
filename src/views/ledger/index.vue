@@ -12,12 +12,20 @@
     <div class="record">
       <div class="title">详情</div>
       <el-button
-        class="addButton"
+        class="textButton"
         link
         type="primary"
         @click="openRecordDetailDialog('add', null)"
       >
         新增
+      </el-button>
+      <el-button
+        class="textButton"
+        link
+        type="primary"
+        @click="openStatisticsDialog"
+      >
+        统计
       </el-button>
       <el-table class="table" :data="recordCurrent">
         <el-table-column
@@ -237,11 +245,39 @@
         </draggable>
       </div>
     </el-dialog>
+    <el-dialog
+      class="statisticsDialog"
+      v-model="statisticsDialogVisible"
+      :close-on-click-modal="false"
+      title="统计"
+      width="90%"
+    >
+      <div>
+        <el-radio-group v-model="radio" @change="initEcharts">
+          <el-radio value="1" size="small">总计</el-radio>
+          <el-radio value="2" size="small">当月</el-radio>
+          <el-radio value="3" size="small">当天</el-radio>
+        </el-radio-group>
+      </div>
+      <div class="echarts">
+        <div
+          class="incomeAndExpenditurePie"
+          ref="incomeAndExpenditurePie"
+        ></div>
+        <div class="expenditureTypePie" ref="expenditureTypePie"></div>
+        <div
+          class="lastWeekExpenditureLine"
+          ref="lastWeekExpenditureLine"
+        ></div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import { ElMessageBox } from "element-plus";
+import * as echarts from "echarts";
 import {
   deleteById,
   insertOne,
@@ -249,7 +285,7 @@ import {
   updateById,
   updateByIds,
 } from "@/dao";
-import { ElMessageBox } from "element-plus";
+
 export default {
   name: "Ledger",
   components: {
@@ -266,6 +302,7 @@ export default {
 
       pageSize: 5,
       currentPage: 1,
+      radio: "1",
 
       recordEntity: null,
       accountEntity: null,
@@ -274,8 +311,13 @@ export default {
       recordDetailDialogVisible: false,
       accountManagerDialogVisible: false,
       labelManagerDialogVisible: false,
+      statisticsDialogVisible: false,
 
       recordDetailDialogType: null,
+
+      incomeAndExpenditurePie: null,
+      expenditureTypePie: null,
+      lastWeekExpenditureLine: null,
 
       flag: false,
     };
@@ -561,6 +603,13 @@ export default {
       this.initRecordLabelEntity();
       this.labelManagerDialogVisible = true;
     },
+    // 打开统计对话框
+    openStatisticsDialog() {
+      this.statisticsDialogVisible = true;
+      this.$nextTick(() => {
+        this.initEcharts();
+      });
+    },
 
     // 格式化类型
     formatType(row, column, val, index) {
@@ -610,6 +659,207 @@ export default {
         this.currentPage * this.pageSize
       );
     },
+
+    // 初始化图表
+    initEcharts() {
+      this.initIncomeAndExpenditurePie();
+      this.initExpenditureTypePie();
+      this.initLastWeekExpenditureLine();
+    },
+    // 时间判断
+    timeJudge(time1, time2, radio) {
+      switch (radio) {
+        case "1":
+          return true;
+        case "2":
+          return (
+            time1.getFullYear() === time2.getFullYear() &&
+            time1.getMonth() === time2.getMonth()
+          );
+        case "3":
+          return (
+            time1.getFullYear() === time2.getFullYear() &&
+            time1.getMonth() === time2.getMonth() &&
+            time1.getDate() === time2.getDate()
+          );
+        default:
+          return false;
+      }
+    },
+    // 生成饼图设置项
+    getPieOption(
+      titleText,
+      titleTop,
+      titleTextStyleFontSize,
+      seriesType,
+      seriesData
+    ) {
+      return {
+        title: {
+          text: titleText,
+          left: "center",
+          top: titleTop,
+          textStyle: {
+            fontSize: titleTextStyleFontSize,
+          },
+        },
+        legend: {
+          show: true,
+          icon: "circle",
+          top: "0",
+          left: "left",
+        },
+        series: [
+          {
+            type: seriesType,
+            radius: ["30%", "40%"],
+            label: {
+              padding: [0, -60],
+              fontSize: "15",
+              fontWeight: "bold",
+              formatter: "{d}%\n\n{c}",
+            },
+            labelLine: {
+              length2: 60,
+            },
+            data: seriesData,
+          },
+        ],
+      };
+    },
+    // 生成折线图设置项
+    getLineOption(titleText, xAxisName, xAxisData, yAxisName, seriesData) {
+      return {
+        title: {
+          text: titleText,
+          left: "center",
+        },
+        xAxis: {
+          name: xAxisName,
+          data: xAxisData,
+        },
+        yAxis: {
+          name: yAxisName,
+        },
+        grid: {
+          left: 40,
+          right: 40,
+        },
+        series: [
+          {
+            type: "line",
+            data: seriesData,
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                },
+              },
+            },
+          },
+        ],
+      };
+    },
+    // 初始化收入支出饼图
+    initIncomeAndExpenditurePie() {
+      let data = [
+        {
+          name: "支出",
+          value: 0,
+        },
+        {
+          name: "收入",
+          value: 0,
+        },
+      ];
+      for (let i = 0; i < this.record.length; i++) {
+        if (this.timeJudge(this.record[i].time, new Date(), this.radio)) {
+          if (this.record[i].ledgerRecordTypeId === 1) {
+            data[0].value += this.record[i].amount;
+          } else if (this.record[i].ledgerRecordTypeId === 2) {
+            data[1].value += this.record[i].amount;
+          }
+        } else {
+          break;
+        }
+      }
+      for (let i = 0; i < data.length; i++) {
+        data[i].value = Math.round(data[i].value * 100) / 100;
+      }
+      let incomeAndExpenditurePie = echarts.init(
+        this.$refs.incomeAndExpenditurePie
+      );
+      incomeAndExpenditurePie.setOption(
+        this.getPieOption("收入支出\n占比图", "42%", 16, "pie", data)
+      );
+    },
+    // 初始化支出类型饼图
+    initExpenditureTypePie() {
+      let data0 = {};
+      for (let i = 0; i < this.record.length; i++) {
+        if (this.record[i].ledgerRecordTypeId === 1) {
+          if (this.timeJudge(this.record[i].time, new Date(), this.radio)) {
+            if (data0[this.record[i].ledgerLabelId] === undefined) {
+              data0[this.record[i].ledgerLabelId] = 0;
+            }
+            data0[this.record[i].ledgerLabelId] += this.record[i].amount;
+          } else {
+            break;
+          }
+        }
+      }
+      let data1 = [];
+      for (let key in data0) {
+        for (let i = 0; i < this.recordLabel.length; i++) {
+          if (this.recordLabel[i].id === parseInt(key)) {
+            data1.push({
+              name: this.recordLabel[i].name,
+              value: Math.round(data0[key] * 100) / 100,
+            });
+          }
+        }
+      }
+      let expenditureTypePie = echarts.init(this.$refs.expenditureTypePie);
+      expenditureTypePie.setOption(
+        this.getPieOption("支出类型\n占比图", "44%", 16, "pie", data1)
+      );
+    },
+    // 初始化最近一周支出折线图
+    initLastWeekExpenditureLine() {
+      let time = new Date();
+      let xAxisData = [];
+      let seriesData = [];
+      let data = 0;
+      let count = 1;
+      for (let i = 0; i < this.record.length; i++) {
+        if (this.record[i].ledgerRecordTypeId === 1) {
+          if (this.timeJudge(this.record[i].time, time, "3")) {
+            data += this.record[i].amount;
+          } else {
+            time.setDate(time.getDate() - 1);
+            xAxisData.unshift(time.getDate());
+            seriesData.unshift(data);
+            data = 0;
+            count++;
+            if (count > 7) {
+              break;
+            }
+          }
+        }
+      }
+      let lastWeekExpenditureLine = echarts.init(
+        this.$refs.lastWeekExpenditureLine
+      );
+      lastWeekExpenditureLine.setOption(
+        this.getLineOption(
+          "最近一周支出图",
+          "日期",
+          xAxisData,
+          "金额",
+          seriesData
+        )
+      );
+    },
   },
   computed: {
     getRecordDetailDialogTitle() {
@@ -645,8 +895,8 @@ export default {
   border-color: rgb(159, 154, 154);
 }
 
-#ledger .record .addButton {
-  margin: 5px 0px 5px 0px;
+#ledger .record .textButton {
+  margin: 5px 2px 5px 0px;
 
   font-size: 16px;
 }
@@ -743,5 +993,24 @@ export default {
 
 #ledger .labelManagerDialog .list .item .button {
   cursor: pointer;
+}
+
+#ledger .statisticsDialog .echarts {
+  text-align: center;
+}
+
+#ledger .statisticsDialog .echarts .incomeAndExpenditurePie {
+  width: 100%;
+  height: 240px;
+}
+
+#ledger .statisticsDialog .echarts .expenditureTypePie {
+  width: 100%;
+  height: 340px;
+}
+
+#ledger .statisticsDialog .echarts .lastWeekExpenditureLine {
+  width: 100%;
+  height: 300px;
 }
 </style>
