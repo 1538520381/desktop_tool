@@ -7,14 +7,15 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const execPath = process.execPath;
 
-let tray;
+let win = null;
+let tray = null;
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
 async function createWindow() {
-  let win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 350,
     height: 800,
     x: screen.getPrimaryDisplay().workArea.width - 350,
@@ -87,6 +88,20 @@ if (isDevelopment) {
       app.quit()
     })
   }
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
+    if (win) {
+      if (win.isMinimized()) {
+        win.restore()
+      }
+      win.focus()
+    }
+  })
 }
 
 // 开启开机自启动
