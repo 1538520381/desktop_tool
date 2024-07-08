@@ -841,6 +841,7 @@ export default {
             seriesData.unshift(data);
             data = 0;
             count++;
+            i--;
             if (count > 7) {
               break;
             }

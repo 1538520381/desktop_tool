@@ -18,6 +18,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 350,
     height: 800,
+    resizable: isDevelopment,
     x: screen.getPrimaryDisplay().workArea.width - 350,
     y: 0,
     alwaysOnTop: true,
