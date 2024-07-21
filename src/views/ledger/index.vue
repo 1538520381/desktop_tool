@@ -1,5 +1,5 @@
 <template>
-  <div id="ledger" v-if="flag">
+  <div id="ledger">
     <div class="overview">
       <div class="title">总览</div>
       <div>
@@ -41,7 +41,7 @@
           :formatter="formatTime"
           width="98px"
         />
-        <el-table-column label="操作">
+        <el-table-column class="operation" label="操作">
           <template #default="scope">
             <el-button
               link
@@ -167,14 +167,21 @@
       </el-form>
       <div class="control">
         <div class="add" v-if="recordDetailDialogType === 'add'">
-          <el-button type="primary" @click="addRecord"> 新增 </el-button>
+          <el-button class="button" type="primary" @click="addRecord">
+            新增
+          </el-button>
         </div>
         <div class="update" v-else-if="recordDetailDialogType === 'update'">
-          <el-button type="primary" @click="updateRecord"> 确定 </el-button>
+          <el-button class="button" type="primary" @click="updateRecord">
+            确定
+          </el-button>
         </div>
         <div class="update" v-else-if="recordDetailDialogType === 'select'">
-          <el-button type="danger" @click="deleteRecord"> 删除 </el-button>
+          <el-button class="button" type="danger" @click="deleteRecord">
+            删除
+          </el-button>
           <el-button
+            class="button"
             type="primary"
             @click="openRecordDetailDialog('update', null)"
           >
@@ -302,7 +309,7 @@ export default {
 
       pageSize: 5,
       currentPage: 1,
-      radio: "1",
+      radio: "2",
 
       recordEntity: null,
       accountEntity: null,
@@ -318,8 +325,6 @@ export default {
       incomeAndExpenditurePie: null,
       expenditureTypePie: null,
       lastWeekExpenditureLine: null,
-
-      flag: false,
     };
   },
   created() {
@@ -332,9 +337,7 @@ export default {
       this.getRecordLabel(),
       this.getRecordType(),
     ]).then(() => {
-      Promise.all([this.getRecord()]).then(() => {
-        this.flag = true;
-      });
+      this.getRecord();
     });
   },
   methods: {
@@ -387,15 +390,17 @@ export default {
 
     // 删除记录
     deleteRecord() {
-      ElMessageBox.confirm("确定删除？").then(() => {
-        deleteById("ledgerRecord", this.recordEntity.id)
-          .then((res) => {
-            this.getRecord();
-            this.recordDetailDialogVisible = false;
-            this.$message.success("删除成功");
-          })
-          .catch(() => {});
-      });
+      ElMessageBox.confirm("确定删除？")
+        .then(() => {
+          deleteById("ledgerRecord", this.recordEntity.id)
+            .then((res) => {
+              this.getRecord();
+              this.recordDetailDialogVisible = false;
+              this.$message.success("删除成功");
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
     },
     // 删除账号
     deleteAccount(id) {
@@ -836,9 +841,9 @@ export default {
           if (this.timeJudge(this.record[i].time, time, "3")) {
             data += this.record[i].amount;
           } else {
-            time.setDate(time.getDate() - 1);
             xAxisData.unshift(time.getDate());
-            seriesData.unshift(data);
+            seriesData.unshift(Math.round(data * 100) / 100);
+            time.setDate(time.getDate() - 1);
             data = 0;
             count++;
             i--;
@@ -913,7 +918,7 @@ export default {
 }
 
 #ledger .recordDetailDialog .form .form-item {
-  margin: 2px;
+  margin: 2px 2px 2px 2px;
 }
 
 #ledger .recordDetailDialog .form .form-item .ledgerRecordTypeId {
@@ -946,6 +951,10 @@ export default {
 
 #ledger .recordDetailDialog .control {
   text-align: right;
+}
+
+#ledger .recordDetailDialog .control .button {
+  height: 26px;
 }
 
 #ledger .accountManagerDialog .form .form-item .name {

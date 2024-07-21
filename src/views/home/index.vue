@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import Todo from "@/views/todo";
 import Ledger from "@/views/ledger";
 import Translate from "@/views/translation";
 
@@ -80,6 +81,10 @@ export default {
       setup: null,
 
       menuItem: [
+        {
+          name: "待做",
+          component: Todo,
+        },
         {
           name: "账本",
           component: Ledger,

@@ -1,4 +1,5 @@
 import { read, write, copy } from "@/utils/IOUtil"
+import { isEmpty } from "@/utils/validate"
 
 const databasePath = "/src/data/"
 const autoFunctionMap = {
@@ -33,17 +34,17 @@ function checkItem(item, template) {
         } else if (typeof (item[itemKey]) != template[itemKey]['type']) {
             throw {
                 code: 1,
-                err: '字段' + itemKey + '数据类型有误，需要数据类型' + template[itemKey]['type']
+                err: '字段' + '\"' + template[itemKey]['description'] + '\"' + '数据类型有误，需要数据类型' + template[itemKey]['type']
             }
         }
     }
     for (let templateKey in template) {
-        if (item[templateKey] === undefined) {
-            if (template[templateKey]['auto'] === undefined) {
+        if (isEmpty(item[templateKey])) {
+            if (isEmpty(template[templateKey]['auto'])) {
                 if (!template[templateKey]['null']) {
                     throw {
                         code: 1,
-                        err: '字段' + templateKey + '不能为空'
+                        err: '字段' + '\"' + template[templateKey]['description'] + '\"' + '不能为空'
                     }
                 }
             } else {
@@ -60,7 +61,7 @@ function checkItem(item, template) {
 // 查询条件字段效验查询条件
 function checkField(queryWrapper, fields) {
     for (let i = 0; i < fields.length; i++) {
-        if (queryWrapper[fields[i]] === undefined) {
+        if (isEmpty(queryWrapper[fields[i]])) {
             throw {
                 code: 1,
                 err: new Error('缺少字段' + fields[i])
