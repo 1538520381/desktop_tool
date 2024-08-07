@@ -263,7 +263,8 @@
         <el-radio-group v-model="radio" @change="initEcharts">
           <el-radio value="1" size="small">总计</el-radio>
           <el-radio value="2" size="small">当月</el-radio>
-          <el-radio value="3" size="small">当天</el-radio>
+          <el-radio value="3" size="small">上月</el-radio>
+          <el-radio value="4" size="small">当天</el-radio>
         </el-radio-group>
       </div>
       <div class="echarts">
@@ -682,6 +683,15 @@ export default {
             time1.getMonth() === time2.getMonth()
           );
         case "3":
+          console.log(time1.getMonth());
+          return (
+            (time1.getFullYear() === time2.getFullYear() &&
+              time1.getMonth() + 1 === time2.getMonth()) ||
+            (time1.getFullYear() + 1 === time2.getFullYear() &&
+              time1.getMonth() === 11 &&
+              time2.getMonth() === 0)
+          );
+        case "4":
           return (
             time1.getFullYear() === time2.getFullYear() &&
             time1.getMonth() === time2.getMonth() &&
@@ -784,8 +794,6 @@ export default {
           } else if (this.record[i].ledgerRecordTypeId === 2) {
             data[1].value += this.record[i].amount;
           }
-        } else {
-          break;
         }
       }
       for (let i = 0; i < data.length; i++) {
@@ -808,8 +816,6 @@ export default {
               data0[this.record[i].ledgerLabelId] = 0;
             }
             data0[this.record[i].ledgerLabelId] += this.record[i].amount;
-          } else {
-            break;
           }
         }
       }
@@ -838,7 +844,7 @@ export default {
       let count = 1;
       for (let i = 0; i < this.record.length; i++) {
         if (this.record[i].ledgerRecordTypeId === 1) {
-          if (this.timeJudge(this.record[i].time, time, "3")) {
+          if (this.timeJudge(this.record[i].time, time, "4")) {
             data += this.record[i].amount;
           } else {
             xAxisData.unshift(time.getDate());
