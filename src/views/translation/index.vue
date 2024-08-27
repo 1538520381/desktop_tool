@@ -6,10 +6,10 @@
       @change="translation"
     >
       <el-option
-        v-for="(item, key) in IOS639"
-        :key="key"
+        v-for="(item, index) in IOS639"
+        :key="index"
         :label="item"
-        :value="key"
+        :value="index"
       />
     </el-select>
     <svg-icon
@@ -19,10 +19,10 @@
     />
     <el-select class="fromLanguage" v-model="toLanguage" @change="translation">
       <el-option
-        v-for="(item, key) in IOS639"
-        :key="key"
+        v-for="(item, index) in IOS639"
+        :key="index"
         :label="item"
-        :value="key"
+        :value="index"
       />
     </el-select>
     <el-input

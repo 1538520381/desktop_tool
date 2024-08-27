@@ -1,12 +1,10 @@
-import { read, write, copy } from "@/utils/IOUtil"
-import { isEmpty } from "@/utils/validate"
+import {read, write, copy} from "@/utils/IOUtil"
+import {isEmpty} from "@/utils/validate"
 
 const databasePath = "/src/data/"
 const autoFunctionMap = {
-    'autoIncrement': autoIncrement,
-    'currentTime': currentTime
+    'autoIncrement': autoIncrement, 'currentTime': currentTime
 }
-
 
 
 // 自动补齐
@@ -28,8 +26,7 @@ function checkItem(item, template) {
     for (let itemKey in item) {
         if (template[itemKey] === undefined) {
             throw {
-                code: 1,
-                err: '数据库无字段' + itemKey
+                code: 1, err: '数据库无字段' + itemKey
             }
         } else if (typeof (item[itemKey]) != template[itemKey]['type']) {
             throw {
@@ -43,13 +40,12 @@ function checkItem(item, template) {
             if (isEmpty(template[templateKey]['auto'])) {
                 if (!template[templateKey]['null']) {
                     throw {
-                        code: 1,
-                        err: '字段' + '\"' + template[templateKey]['description'] + '\"' + '不能为空'
+                        code: 1, err: '字段' + '\"' + template[templateKey]['description'] + '\"' + '不能为空'
                     }
                 }
             } else {
                 for (let key in autoFunctionMap) {
-                    if (template[templateKey]['auto'].indexOf(key) == 0) {
+                    if (template[templateKey]['auto'].indexOf(key) === 0) {
                         autoFunctionMap[key](template, item, templateKey)
                     }
                 }
@@ -63,8 +59,7 @@ function checkField(queryWrapper, fields) {
     for (let i = 0; i < fields.length; i++) {
         if (isEmpty(queryWrapper[fields[i]])) {
             throw {
-                code: 1,
-                err: new Error('缺少字段' + fields[i])
+                code: 1, err: new Error('缺少字段' + fields[i])
             }
         }
     }
@@ -97,8 +92,7 @@ function checkByQuery(item, queryWrapper) {
                 checkField(queryWrapper, ['field', 'value'])
                 if (typeof (item[queryWrapper['field']]) != 'string') {
                     throw {
-                        code: 1,
-                        err: new Error('只能对字符串类型字段进行模糊查询')
+                        code: 1, err: new Error('只能对字符串类型字段进行模糊查询')
                     }
                 }
                 return item[queryWrapper['field']].indexOf(queryWrapper['value']) >= 0
@@ -110,14 +104,12 @@ function checkByQuery(item, queryWrapper) {
                 return checkByQuery(item, queryWrapper['condition1']) || checkByQuery(item, queryWrapper['condition2'])
             default:
                 throw {
-                    code: 1,
-                    err: new Error('未知运算符')
+                    code: 1, err: new Error('未知运算符')
                 }
         }
     } catch (err) {
         throw {
-            code: 1,
-            err: err.err
+            code: 1, err: err.err
         }
     }
 }
@@ -138,25 +130,21 @@ export function insertOne(dataName, item) {
                     copy(databasePath + dataName + ".json.temp", databasePath + dataName + ".json").then((res3) => {
                     }).catch((err) => {
                         reject({
-                            code: 1,
-                            err: err.err
+                            code: 1, err: err.err
                         })
                     })
                     reject({
-                        code: 1,
-                        err: err.err
+                        code: 1, err: err.err
                     })
                 })
             }).catch((err) => {
                 reject({
-                    code: 1,
-                    err: err.err
+                    code: 1, err: err.err
                 })
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -180,25 +168,21 @@ export function insertList(dataName, items) {
 
                     }).catch((err) => {
                         reject({
-                            code: 1,
-                            err: err.err
+                            code: 1, err: err.err
                         })
                     })
                     reject({
-                        code: 1,
-                        err: err.err
+                        code: 1, err: err.err
                     })
                 })
             }).catch((err) => {
                 reject({
-                    code: 1,
-                    err: err.err
+                    code: 1, err: err.err
                 })
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -222,32 +206,27 @@ export function deleteById(dataName, id) {
 
                             }).catch((err) => {
                                 reject({
-                                    code: 1,
-                                    err: err.err
+                                    code: 1, err: err.err
                                 })
                             })
                             reject({
-                                code: 1,
-                                err: err.err
+                                code: 1, err: err.err
                             })
                         })
                     }).catch((err) => {
                         reject({
-                            code: 1,
-                            err: err.err
+                            code: 1, err: err.err
                         })
                     })
                     return;
                 }
             }
             reject({
-                code: 1,
-                err: "无法在" + dataName + "表中查询到id为" + id + "的记录"
+                code: 1, err: "无法在" + dataName + "表中查询到id为" + id + "的记录"
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -268,8 +247,7 @@ export function deleteByIds(dataName, ids) {
                 }
                 if (!flag) {
                     reject({
-                        code: 1,
-                        err: "无法在" + dataName + "表中查询到id为" + ids[i] + "的记录"
+                        code: 1, err: "无法在" + dataName + "表中查询到id为" + ids[i] + "的记录"
                     })
                     return;
                 }
@@ -284,25 +262,21 @@ export function deleteByIds(dataName, ids) {
 
                     }).catch((err) => {
                         reject({
-                            code: 1,
-                            err: err.err
+                            code: 1, err: err.err
                         })
                     })
                     reject({
-                        code: 1,
-                        err: err.err
+                        code: 1, err: err.err
                     })
                 })
             }).catch((err) => {
                 reject({
-                    code: 1,
-                    err: err.err
+                    code: 1, err: err.err
                 })
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -329,32 +303,27 @@ export function updateById(dataName, item) {
 
                             }).catch((err) => {
                                 reject({
-                                    code: 1,
-                                    err: err.err
+                                    code: 1, err: err.err
                                 })
                             })
                             reject({
-                                code: 1,
-                                err: err.err
+                                code: 1, err: err.err
                             })
                         })
                     }).catch((err) => {
                         reject({
-                            code: 1,
-                            err: err.err
+                            code: 1, err: err.err
                         })
                     })
                     return;
                 }
             }
             reject({
-                code: 1,
-                err: "无法在" + dataName + "表中查询到id为" + item['id'] + "的记录"
+                code: 1, err: "无法在" + dataName + "表中查询到id为" + item['id'] + "的记录"
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -378,8 +347,7 @@ export function updateByIds(dataName, items) {
                 }
                 if (!flag) {
                     reject({
-                        code: 1,
-                        err: "无法在" + dataName + "表中查询到id为" + items[i]['id'] + "的记录"
+                        code: 1, err: "无法在" + dataName + "表中查询到id为" + items[i]['id'] + "的记录"
                     })
                     return;
                 }
@@ -394,25 +362,21 @@ export function updateByIds(dataName, items) {
 
                     }).catch((err) => {
                         reject({
-                            code: 1,
-                            err: err.err
+                            code: 1, err: err.err
                         })
                     })
                     reject({
-                        code: 1,
-                        err: err.err
+                        code: 1, err: err.err
                     })
                 })
             }).catch((err) => {
                 reject({
-                    code: 1,
-                    err: err.err
+                    code: 1, err: err.err
                 })
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -426,13 +390,11 @@ export function selectAll(dataName) {
             let data = res.data
             data.shift();
             resolve({
-                code: 0,
-                data: data
+                code: 0, data: data
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         });
     });
@@ -445,20 +407,17 @@ export function selectById(dataName, id) {
             for (let i = 1; i < res.data.length; i++) {
                 if (res.data[i]['id'] === id) {
                     resolve({
-                        code: 0,
-                        data: res.data[i]
+                        code: 0, data: res.data[i]
                     })
                     return;
                 }
             }
             reject({
-                code: 1,
-                err: "无法在" + dataName + "表中查询到id为" + id + "的记录"
+                code: 1, err: "无法在" + dataName + "表中查询到id为" + id + "的记录"
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })
@@ -475,13 +434,11 @@ export function selectByQueryWrapper(dataName, queryWrapper) {
                 }
             }
             resolve({
-                code: 0,
-                data: data
+                code: 0, data: data
             })
         }).catch((err) => {
             reject({
-                code: 1,
-                err: err.err
+                code: 1, err: err.err
             })
         })
     })

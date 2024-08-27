@@ -1,0 +1,26 @@
+[
+    {
+      "id": {
+        "description": "主键",
+        "type": "number",
+        "null": false,
+        "auto": "autoIncrement:1"
+      },
+      "title": {
+        "description": "主题",
+        "type": "string",
+        "null": false
+      },
+      "content": {
+        "description": "内容",
+        "type": "string",
+        "null": true
+      },
+      "createTime": {
+        "description": "创建时间",
+        "type": "string",
+        "null": false,
+        "auto": "currentTime"
+      }
+    }
+  ]

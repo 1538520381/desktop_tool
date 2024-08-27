@@ -2,55 +2,56 @@
   <div id="home">
     <div class="set">
       <el-upload
-        class="upload"
-        :auto-upload="false"
-        :on-change="importData"
-        :show-file-list="false"
+          class="upload"
+          :auto-upload="false"
+          :on-change="importData"
+          :show-file-list="false"
       >
-        <svg-icon class="icon" icon-class="import" />
+        <svg-icon class="icon" icon-class="import"/>
       </el-upload>
-      <svg-icon class="icon" icon-class="export" @click="exportData" />
-      <svg-icon class="icon" icon-class="setup" @click="openSetupDialog" />
+      <svg-icon class="icon" icon-class="export" @click="exportData"/>
+      <svg-icon class="icon" icon-class="setup" @click="openSetupDialog"/>
     </div>
     <div class="menu">
       <el-button
-        class="menu-item"
-        :class="{ 'menu-item-hover': index === menuItemActive }"
-        v-for="(item, index) in menuItem"
-        :key="index"
-        @click="selectMenuItem(index)"
-        >{{ item.name }}</el-button
+          class="menu-item"
+          :class="{ 'menu-item-hover': index === menuItemActive }"
+          v-for="(item, index) in menuItem"
+          :key="index"
+          @click="selectMenuItem(index)"
+      >{{ item.name }}
+      </el-button
       >
     </div>
     <div class="main">
-      <component :is="menuItem[menuItemActive].component" :key="refreshFlag" />
+      <component :is="menuItem[menuItemActive].component" :key="refreshFlag"/>
     </div>
     <el-dialog
-      class="setupDialog"
-      v-model="setupDialogVisible"
-      width="80%"
-      title="设置"
+        class="setupDialog"
+        v-model="setupDialogVisible"
+        width="80%"
+        title="设置"
     >
       <el-form class="form" :model="setup">
         <el-form-item class="item" label="开机自启动" label-width="100px">
           <el-switch
-            class="selfStartUp"
-            v-model="setup.selfStartUp"
-            @change="setSelfStartUp"
+              class="selfStartUp"
+              v-model="setup.selfStartUp"
+              @change="setSelfStartUp"
           />
         </el-form-item>
         <el-form-item class="item" label="百度AppId" label-width="100px">
           <el-input
-            v-model="setup.baiduAppId"
-            type="password"
-            @change="setBaiduAppId"
+              v-model="setup.baiduAppId"
+              type="password"
+              @change="setBaiduAppId"
           />
         </el-form-item>
         <el-form-item class="item" label="百度密钥" label-width="100px">
           <el-input
-            v-model="setup.baiduSecretKey"
-            type="password"
-            @change="setBaiduSecretKey"
+              v-model="setup.baiduSecretKey"
+              type="password"
+              @change="setBaiduSecretKey"
           />
         </el-form-item>
       </el-form>
@@ -59,21 +60,22 @@
 </template>
 
 <script>
+import Note from "@/views/note";
 import Todo from "@/views/todo";
 import Ledger from "@/views/ledger";
 import Translate from "@/views/translation";
 
-import { read, write } from "@/utils/IOUtil";
-import { openSelfStartUp, closeSelfStartUp } from "@/utils/selfStartUpUtil";
-import { compress, decompress } from "@/utils/compressUtil";
+import {read, write} from "@/utils/IOUtil";
+import {openSelfStartUp, closeSelfStartUp} from "@/utils/selfStartUpUtil";
+import {compress, decompress} from "@/utils/compressUtil";
 
-import { ElMessageBox } from "element-plus";
-import { ipcRenderer } from "electron";
+import {ElMessageBox} from "element-plus";
+import {ipcRenderer} from "electron";
 
 const path =
-  process.env.NODE_ENV === "production"
-    ? localStorage.getItem("appPath")
-    : process.cwd();
+    process.env.NODE_ENV === "production"
+        ? localStorage.getItem("appPath")
+        : process.cwd();
 export default {
   name: "Home",
   data() {
@@ -81,6 +83,10 @@ export default {
       setup: null,
 
       menuItem: [
+        {
+          name: "随手记",
+          component: Note,
+        },
         {
           name: "待做",
           component: Todo,
@@ -114,13 +120,13 @@ export default {
     // 获取设置
     getSetup() {
       read("/src/json/setup.json")
-        .then((res) => {
-          this.setup = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(err.err.toString());
-          console.log(err);
-        });
+          .then((res) => {
+            this.setup = res.data;
+          })
+          .catch((err) => {
+            this.$message.error(err.err.toString());
+            console.log(err);
+          });
     },
 
     // 打开设置对话框
@@ -136,35 +142,37 @@ export default {
     // 设置开机自启动
     setSelfStartUp() {
       this.updateSetup()
-        .then((res) => {
-          if (this.setup.selfStartUp) {
-            openSelfStartUp();
-          } else {
-            closeSelfStartUp();
-          }
-        })
-        .catch((err) => {
-          this.$message.error(err.err.toString());
-          console.log(err);
-        });
+          .then((res) => {
+            if (this.setup.selfStartUp) {
+              openSelfStartUp();
+            } else {
+              closeSelfStartUp();
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err.err.toString());
+            console.log(err);
+          });
     },
     // 设置百度AppId
     setBaiduAppId() {
       this.updateSetup()
-        .then((res) => {})
-        .catch((err) => {
-          this.$message.error(err.err.toString());
-          console.log(err);
-        });
+          .then((res) => {
+          })
+          .catch((err) => {
+            this.$message.error(err.err.toString());
+            console.log(err);
+          });
     },
     // 设置百度密钥
     setBaiduSecretKey() {
       this.updateSetup()
-        .then((res) => {})
-        .catch((err) => {
-          this.$message.error(err.err.toString());
-          console.log(err);
-        });
+          .then((res) => {
+          })
+          .catch((err) => {
+            this.$message.error(err.err.toString());
+            console.log(err);
+          });
     },
 
     // 导入数据
@@ -174,17 +182,18 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(() => {
-          let res = decompress(file.raw.path, path + "/src/data");
-          if (res.code === 0) {
-            this.refreshFlag = !this.refreshFlag;
-            this.$message.success("导入成功");
-          } else {
-            this.$message.error(res.err.toString());
-            console.log(res.err);
-          }
-        })
-        .catch(() => {});
+          .then(() => {
+            let res = decompress(file.raw.path, path + "/src/data");
+            if (res.code === 0) {
+              this.refreshFlag = !this.refreshFlag;
+              this.$message.success("导入成功");
+            } else {
+              this.$message.error(res.err.toString());
+              console.log(res.err);
+            }
+          })
+          .catch(() => {
+          });
     },
     // 导出数据
     exportData() {
