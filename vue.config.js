@@ -32,7 +32,8 @@ module.exports = defineConfig({
         "appId": "com.Persolute.desktop_tool",
         "extraFiles": ['./src/data', './src/json'],
         "win": {
-          "icon": "./public/logo/logo.ico"
+          "icon": "./public/logo/logo.ico",
+          "signAndEditExecutable": false
         },
         "nsis": {
           "oneClick": false,
