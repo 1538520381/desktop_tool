@@ -9,17 +9,34 @@ const execPath = process.execPath;
 
 let win = null;
 let tray = null;
+let checkTimer = null;
+let isWindowHidden = false;
+let isAnimating = false;
+let windowWidth = 350;
+let windowHeight = 800;
+let savedX = 0;
+let savedY = 0;
+
+// 窗口隐藏阈值：窗口顶部距离屏幕上边缘小于此值时触发隐藏
+const HIDE_THRESHOLD = 5;
+// 窗口显示阈值：鼠标距离屏幕上边缘小于此值时触发显示
+const SHOW_THRESHOLD = 30;
+// 动画步长：每次动画移动的像素数
+const ANIMATION_STEP = 10;
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
 async function createWindow() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const workArea = primaryDisplay.workArea;
+
   win = new BrowserWindow({
-    width: 350,
-    height: 800,
+    width: windowWidth,
+    height: windowHeight,
     resizable: isDevelopment,
-    x: screen.getPrimaryDisplay().workArea.width - 350,
+    x: workArea.width - windowWidth,
     y: 0,
     alwaysOnTop: true,
     webPreferences: {
@@ -29,6 +46,11 @@ async function createWindow() {
     }
   })
 
+  // 从实际窗口获取真实尺寸（考虑DPI缩放）
+  const bounds = win.getBounds();
+  windowWidth = bounds.width;
+  windowHeight = bounds.height;
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
@@ -36,6 +58,15 @@ async function createWindow() {
     createProtocol('app')
     win.loadURL('app://./index.html')
   }
+
+  // 监听窗口移动完成，靠近上边缘时隐藏
+  win.on('moved', (event) => {
+    if (isWindowHidden) return;
+    const [x, y] = win.getPosition();
+    if (y <= HIDE_THRESHOLD) {
+      hideWindow();
+    }
+  });
 
   win.on('close', (event) => {
     win.hide();
@@ -50,8 +81,7 @@ async function createWindow() {
   }
   tray.setToolTip('desktop_tool')
   tray.on('click', () => {
-    win.show()
-    win.setSkipTaskbar(false)
+    showWindow();
   })
   const contectMenu = Menu.buildFromTemplate([
     {
@@ -153,3 +183,106 @@ ipcMain.handle('selectDirectory', async () => {
     };
   }
 })
+
+/**
+ * 窗口向上收起动画（简单步进方式）
+ * 将窗口从当前位置向上滚动到屏幕外隐藏
+ */
+function hideWindow() {
+  if (isWindowHidden || isAnimating) return;
+  
+  const bounds = win.getBounds();
+  const startX = Math.floor(bounds.x);
+  const startY = Math.floor(bounds.y);
+  savedX = startX;
+  savedY = startY;
+  
+  isAnimating = true;
+  
+  const display = screen.getPrimaryDisplay();
+  const workArea = display.workArea;
+  const targetY = Math.floor(workArea.y - windowHeight + 10);
+
+  function step() {
+    if (!win || win.isDestroyed()) {
+      isAnimating = false;
+      return;
+    }
+    
+    const currentBounds = win.getBounds();
+    const currentY = Math.floor(currentBounds.y);
+    
+    if (currentY <= targetY) {
+      win.setBounds({ x: startX, y: targetY, width: windowWidth, height: windowHeight });
+      isWindowHidden = true;
+      isAnimating = false;
+      startCheckMouse();
+      return;
+    }
+    
+    const newY = Math.max(targetY, currentY - ANIMATION_STEP);
+    win.setBounds({ x: startX, y: newY, width: windowWidth, height: windowHeight });
+    setTimeout(step, 5);
+  }
+  
+  setTimeout(step, 0);
+}
+
+/**
+ * 窗口向下滑出动画（简单步进方式）
+ * 将窗口从屏幕外向下滚动回原始位置显示
+ */
+function showWindow() {
+  if (!isWindowHidden || isAnimating) return;
+  
+  isAnimating = true;
+  stopCheckMouse();
+
+  function step() {
+    if (!win || win.isDestroyed()) {
+      isAnimating = false;
+      return;
+    }
+    
+    const currentBounds = win.getBounds();
+    const currentY = Math.floor(currentBounds.y);
+    
+    if (currentY >= savedY) {
+      win.setBounds({ x: savedX, y: savedY, width: windowWidth, height: windowHeight });
+      isWindowHidden = false;
+      isAnimating = false;
+      return;
+    }
+    
+    const newY = Math.min(savedY, currentY + ANIMATION_STEP);
+    win.setBounds({ x: savedX, y: newY, width: windowWidth, height: windowHeight });
+    setTimeout(step, 5);
+  }
+  
+  setTimeout(step, 0);
+}
+
+/**
+ * 开始定时检查鼠标位置
+ * 当鼠标移动到屏幕上边缘时触发窗口显示
+ */
+function startCheckMouse() {
+  stopCheckMouse();
+  checkTimer = setInterval(() => {
+    const mousePos = screen.getCursorScreenPoint();
+    if (mousePos.y <= SHOW_THRESHOLD) {
+      showWindow();
+    }
+  }, 100);
+}
+
+/**
+ * 停止检查鼠标位置
+ * 清除之前设置的定时器
+ */
+function stopCheckMouse() {
+  if (checkTimer) {
+    clearInterval(checkTimer);
+    checkTimer = null;
+  }
+}
