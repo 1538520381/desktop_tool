@@ -554,6 +554,12 @@ export default {
                     case 3:
                       this.account[j]["amount"] = this.record[i]["amount"];
                       break;
+                    case 4:
+                      this.account[j]["amount"] -= this.record[i]["amount"];
+                      break;
+                    case 5:
+                      this.account[j]["amount"] += this.record[i]["amount"];
+                      break;
                     default:
                       this.$message.error(
                           "未知账本记录类型主键" +
