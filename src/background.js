@@ -39,6 +39,7 @@ async function createWindow() {
     x: workArea.width - windowWidth,
     y: 0,
     alwaysOnTop: true,
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
