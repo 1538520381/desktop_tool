@@ -88,10 +88,6 @@ export default {
           component: Note,
         },
         {
-          name: "待做",
-          component: Todo,
-        },
-        {
           name: "账本",
           component: Ledger,
         },
