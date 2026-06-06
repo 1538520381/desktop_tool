@@ -70,8 +70,12 @@ async function createWindow() {
   });
 
   win.on('close', (event) => {
+    const bounds = win.getBounds();
+    savedX = Math.floor(bounds.x);
+    savedY = Math.floor(bounds.y);
     win.hide();
     win.setSkipTaskbar(true);
+    isWindowHidden = true;
     event.preventDefault();
   });
 
@@ -236,6 +240,8 @@ function hideWindow() {
 function showWindow() {
   if (!isWindowHidden || isAnimating) return;
   
+  win.show();
+  win.setSkipTaskbar(false);
   isAnimating = true;
   stopCheckMouse();
 
